@@ -14,4 +14,11 @@ describe("home page", () => {
     cy.get("dt").eq(1).contains("25+ Lessons")
     cy.get("dt").eq(2).contains("Free and Open Source")
   })
+
+  context("Courses section", () => {
+    it("Course: Testing Your First Next.js Application", () => {
+        cy.getByData("course-0").find("a").contains("Get started").click()
+        cy.location("pathname").should("equal", "/testing-your-first-application")
+    })
+  })
 })
