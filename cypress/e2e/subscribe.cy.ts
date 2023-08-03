@@ -15,9 +15,9 @@ describe("Newsletter Subscribe Form", () => {
     cy.getByData("success-message").should("not.exist")
   })
 
-  it("allows users to subscribe to the email list", () => {
-    cy.intercept("POST", "http://localhost:3000/api/subscribe", ).as("post")
+  it("does NOT allow already subscribed email addresses", () => {
     cy.getByData("email-input").type("john@example.com")
+    cy.intercept("POST", "http://localhost:3000/api/subscribe", ).as("post")
     cy.getByData("submit-button").click()
     cy.wait("@post").then((interception) => {
         expect(interception.response.statusCode).to.eq(403)
