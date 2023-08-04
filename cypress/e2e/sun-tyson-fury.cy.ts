@@ -1,23 +1,18 @@
+import cypress from "cypress"
+
 describe("home page", () => {
   beforeEach(() => {
     cy.visit("https://thesun.co.uk")
   })
   const getIframeDocument = (selector) => {
-    return (
-      cy
-        .get(selector)
-        .its("0.contentDocument")
-        .should("exist")
-    )
+    return cy.get(selector).its("0.contentDocument").should("exist")
   }
 
   const getIframeBody = (selector) => {
-    return (
-      getIframeDocument(selector)
-        .its("body")
-        .should("not.be.undefined")
-        .then(cy.wrap)
-    )
+    return getIframeDocument(selector)
+      .its("body")
+      .should("not.be.undefined")
+      .then(cy.wrap)
   }
 
   it("Search for Tyson Fury", () => {
@@ -35,5 +30,18 @@ describe("home page", () => {
     cy.get(".search-page-header__query")
       .should("be.visible")
       .should("have.text", "Tyson Fury")
+    cy.get('h3:contains("Fury")').each(($article) => {
+      if ($article.next().text().includes("Tyson Fury")) {
+        $article.trigger("click")
+        console.log(
+          $article
+            .parent()
+            .parent()
+            .attr("data-id")
+        )
+        return false
+      }
+    })
+    cy.get("main[class='col sun-col-4'").contains("Tyson Fury")
   })
 })
